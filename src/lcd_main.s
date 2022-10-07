@@ -4,16 +4,16 @@
 
 
 @Definição das constantes
-.equ pagelen, 4096  
+.equ pagelen, 4096              @ Tamanho da pagina de memoria paginada
 .equ setregoffset, 28 
 .equ clrregoffset, 40 
 .equ prot_read, 1  
 .equ prot_write, 2  
 .equ map_shared, 1  
-.equ sys_open, 5  
+.equ sys_open, 5                @ Numero da syscall para abrir arquivo
 .equ sys_map, 192  
-.equ nano_sleep, 162 
-.equ level, 52  
+.equ nano_sleep, 162						@ Numero da syscall para nanosleep 
+.equ level, 52                  @ Offset para o registrador de niveis da GPIO
 .equ off, 0
 .equ on, 1
 
@@ -353,14 +353,19 @@
 
 
 _start:
+  @ Inicializa o display
   InitDisplay
 	InitDisplay
 
 @Faz o reinício da contagem
 restart:
 	ClearDisplay
-  MOV R12, #9
-  MOV R4, #9
+
+	@ Inicia o timer em 99 segundos
+  MOV R12, #9             @ Digito da dezena
+  MOV R4, #9              @ Digito da unidade
+
+	@ Exibe uma mensagem inicial
 
   writeChar #65 @A
   writeChar #112 @p
@@ -416,9 +421,9 @@ wait_button_up_pause:
 
 @Loop para realizar a contagem e escrever no display   
 loop:
-  ClearDisplay
-  writeDigit R12
-  writeDigit R4
+  ClearDisplay            @ Limpa o conteúdo do display
+  writeDigit R12          @ Escreve o digito de dezena
+  writeDigit R4           @ Escreve o digito de unidade
 
   
 
@@ -427,33 +432,36 @@ loop:
 
   MOV R6, #13
   verifica_button:
-    LDR R9, [R8, #level]
+    LDR R9, [R8, #level]    @ Leitura dos niveis dos pinos da GPIO
     
-    MOV R11, #1
-    LSL R11, #5
-		MOV R5, #1
-    LSL R5, #26
+    MOV R11, #1             @ Mascara o bit referente ao
+    LSL R11, #5             @ botão de start/pause
+	
+		MOV R5, #1              @ Mascara o bit referente ao
+    LSL R5, #26             @ botão de restart
 
-		AND R10, R5, R9
-    cmp R10, #0
-    beq restart
+		AND R10, R5, R9         @ Descarta o valores não relevantes
+    cmp R10, #0             @ verifica se o nivel do botão de restart é 0 (pressionado)
+    beq restart             @ Se pressionado, reinicia timer
 
-    AND R10, R11, R9
-    CMP R10, #0
-    bleq wait_button_up_pause
+    AND R10, R11, R9        @ Descarta o valores não relevantes
+    CMP R10, #0             @ verifica se o nivel do botão de start/pause é 0 (pressionado)
+    bleq wait_button_up_pause   @ Se pressionado, pausa o timer
 
-    nanoSleep2 time100ms 
-    SUB R6, R6, #1
-    CMP R6, #0
-    BNE verifica_button
+		@ Se nenhum botão foi pressionado, continua contagem do timer
+    nanoSleep2 time100ms    @ Aguarda 100ms
+    SUB R6, R6, #1          @ Decrementa 100ms do tempo passado
+    CMP R6, #0              @ Verifica se já se passou 1 segundo (1000ms)
+    BNE verifica_button     @ Se ainda não passou, continua contagem
 
 
 	@Subtrai o valor da unidade e verificar se é maior ou igual a zero, se sim
 	@continua a contagem
   SUB R4, R4, #1
-  CMP R4, #0
+  CMP R4, #0								@ Verifica se a unidade de segundos foi zerada
   
-  BGE loop
+  BGE loop                	@ Se falso volta para inicio do loop e atualiza
+                            @ as informações exibidas
 
 	@Subtrai o valor da dezena e verifica se é menor que zero, se sim reinicia a contagem
 	@caso contrário adiciona 9 a unidade e continua a contagem
@@ -461,10 +469,10 @@ loop:
   SUB R12, R12, #1
   CMP R12, #0
 
-  BLT restart
+  BLT restart               @ Se terminado, reinicia contador
 
-  MOV R4, #9
-  b loop
+  MOV R4, #9                @ Se não, reseta o digito de unidade para 9 segundos
+  b loop                    @ e continua contagem
 
 
 
