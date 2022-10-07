@@ -360,7 +360,12 @@ wait_button_up_start:
     b loop
 
 wait_button_up_pause:
-    LDR R9, [R8, #level]
+    LDR R9, [R8, #level]        @ Lê nivel dos pinos da GPIO
+    nanoSleep2 time10ms         @ Aguarda ms para eliminar ruidos/ debounce
+    LDR R0, [R8, #level]        @ Lê nivel dos pinos novamente
+
+    ORR R9, R9, R0              @ Descarta variações nos pinos dos botões.
+
     MOV R11, #1
     LSL R11, #5
     AND R10, R11, R9
@@ -376,27 +381,46 @@ loop:
 
 
 
-    MOV R6, #13
-    verifica_button:
-        LDR R9, [R8, #level]
+    MOV R6, #10
+verifica_button:
+    LDR R9, [R8, #level]        @ Lê nivel dos pinos da GPIO
+    nanoSleep2 time10ms         @ Aguarda ms para eliminar ruidos/ debounce
+    LDR R0, [R8, #level]        @ Lê nivel dos pinos novamente
 
-        MOV R11, #1
-        LSL R11, #5
-        MOV R5, #1
-        LSL R5, #26
+    ORR R9, R9, R0              @ Descarta variações nos pinos dos botões.
 
-        AND R10, R5, R9
-        cmp R10, #0
-        beq restart
+    MOV R11, #1
+    LSL R11, #5                 @ Offset para o bit referente ao GPIO5 (Botão de start / pausa)
+    MOV R5, #1
+    LSL R5, #26
 
-        AND R10, R11, R9
-        CMP R10, #0
-        bleq wait_button_up_pause
+    AND R10, R5, R9
+    cmp R10, #0
+    beq restart
 
-        nanoSleep2 time100ms
-        SUB R6, R6, #1
-        CMP R6, #0
-        BNE verifica_button
+    AND R10, R11, R9
+    CMP R10, #0
+    bleq paused_state
+
+    nanoSleep2 time90ms
+    SUB R6, R6, #1
+    CMP R6, #0
+    BNE verifica_button
+
+paused_state:
+    LDR R9, [R8, #level]        @ Lê nivel dos pinos da GPIO
+    nanoSleep2 time10ms         @ Aguarda ms para eliminar ruidos/ debounce
+    LDR R0, [R8, #level]        @ Lê nivel dos pinos novamente
+
+    ORR R9, R9, R0              @ Descarta variações nos pinos dos botões.
+
+    MOV R11, #1
+    LSL R11, #5                 @ Offset para o bit referente ao GPIO5 (Botão de start / pausa)
+
+    AND R10, R11, R9
+    CMP R10, #0
+    beq verifica_button
+    B paused_state              @ Se botão de inicio/pausa não pressionado, continua pausado.
 
 
 
@@ -413,12 +437,6 @@ loop:
 
     MOV R4, #9
     b loop
-
-
-
-
-
-
 
 
 end:
@@ -488,3 +506,11 @@ time500ms:
 time100ms:
     .word 0
     .word 100000000
+
+time90ms:
+    .word 0
+    .word 90000000
+
+time10ms:
+    .word 0
+    .word 10000000
