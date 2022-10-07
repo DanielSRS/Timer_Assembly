@@ -1,4 +1,4 @@
-@Timer regressivo que começa com o valor inicial 99 e exibe a contagem no display.
+@Timer regressivo que começa com o valor inicial 30 e exibe a contagem no display.
 @Este código foi testado em uma Raspberry pi zero W e um display LCD HD44780U.
 @Autores : Joanderson Santos, Daniel Santa Rosa e Alexandre Silva Caribé 
 
@@ -361,9 +361,9 @@ _start:
 restart:
 	ClearDisplay
 
-	@ Inicia o timer em 99 segundos
-  MOV R12, #9             @ Digito da dezena
-  MOV R4, #9              @ Digito da unidade
+	@ Inicia o timer em 30 segundos
+  MOV R12, #3             @ Digito da dezena
+  MOV R4, #0              @ Digito da unidade
 
 	@ Exibe uma mensagem inicial
 
