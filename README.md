@@ -27,12 +27,14 @@ O problema propõe desenvolver um aplicativo de temporização para um processad
 #### Buildar Makefile
 
 ```http
+  cd src/
   make all
 ```
 
 #### Executar Makefile
 
 ```http
+  cd src/
   make run
 ```
 
