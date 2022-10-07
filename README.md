@@ -24,6 +24,17 @@ O problema propõe desenvolver um aplicativo de temporização para um processad
 ```http
   ./arquivo
 ```
+#### Buildar Makefile
+
+```http
+  make run
+```
+
+#### Executar Makefile
+
+```http
+  make run
+```
 
 ## :heavy_check_mark: Softwares Utilizados
 
