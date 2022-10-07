@@ -10,30 +10,30 @@ O problema propõe desenvolver um aplicativo de temporização para um processad
 
 #### Assemblar um arquivo
 
-```http
+```
   as -o lcd_main.o lcd_main.s
 ```
 
 #### Linkar um objeto compilado ou arquivo compactado
 
-```http
+```
   ld -o lcd_main lcd_main.o
 ```
 #### Executar código
 
-```http
+```
   ./lcd_main
 ```
 #### Buildar Makefile
 
-```http
+```
   cd src/
   make all
 ```
 
 #### Executar Makefile
 
-```http
+```
   cd src/
   make run
 ```
@@ -76,7 +76,7 @@ MOV reg,#val -  coloca o número val no registrador chamado reg.
 
 SVC cond -  instrução causa uma exceção. Isso significa que o modo do processador muda para Supervisor, o CPSR é salvo no modo Supervisor SPSR e a execução ramifica para o vetor SVC.
 
-ADDEQ reg, #val
+ADDEQ reg, #val - Faz a adição somente se for igual
 
 ADD reg,#val -  adiciona o número val ao conteúdo do registro reg.
 
@@ -94,23 +94,20 @@ AND reg,#val -  calcula o booleano e a função do número em reg com val.
 
 POP {reg1,reg2,...} - copia os valores do topo da pilha para a lista de registradores reg1,reg2,.... Somente registradores de uso geral e pc podem ser exibidos.
 
-.LTORG
 
 LSL reg,#val -  desloca a representação binária do número em reg por val lugares para a esquerda.
 
-MOVS reg1, reg - 
-
-BNE cond -  
+BNE cond - muda o ramo quando resultado da comparação é não igual 
 
 B cond -  muda o ramo para cond
 
 SUB reg,#val -  subtrai o número val do valor em reg.
 
-BEQ cond -  
+BEQ cond -   muda o ramo quando resultado da comparação é igual
 
-BLT cond -  
+BLT cond -  muda o ramo quando resultado da comparação é menor que
 
-BGT cond -  
+BGT cond -  muda o ramo quando resultado da comparação é maior que
 
 ## Testes
 1- Contagem do valor pré-definido até 0
