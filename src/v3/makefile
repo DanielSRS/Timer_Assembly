@@ -13,4 +13,4 @@ Timer_v3_lib.o: Timer_v3_lib.s
 		as -c Timer_v3_lib.s -o Timer_v3_lib.o
  
 clean:
-		rm -rf *.o *~ main
+		rm -rf *.o *~ Timer
