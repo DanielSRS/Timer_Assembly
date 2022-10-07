@@ -2,7 +2,7 @@
 
 ![GitHub Org's stars](https://img.shields.io/github/stars/DanielSRS?style=social)
 
-O problema propõe desenvolver um aplicativo de temporização que apresente a contagem num display LCD
+O problema propõe desenvolver um aplicativo de temporização para um processador ARMV6L que apresente a contagem num display LCD 16x2, esse display exibirá o tempo em segundos que é pré-definido no código, além disso o app deve ser capaz de aceitar a entrada de 2 botões que tem como papel Start/Pause e Restart que reseta a contagem para o tempo pré-definido. Também é pedido que o código seja modelado pensando em funcionar como uma biblioteca para os problemas futuros, tendo como principais funçoes: 1- Escrever Carácter, 2- Limpar Display e 3- Posicionar cursor linha e coluna.
 
 
 
