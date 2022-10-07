@@ -2,7 +2,7 @@
 
 ![GitHub Org's stars](https://img.shields.io/github/stars/DanielSRS?style=social)
 
-O problema propõe desenvolver um aplicativo de temporização que apresente a contagem num display LCD
+O problema propõe desenvolver um aplicativo de temporização para um processador ARMV6L que apresente a contagem num display LCD 16x2, esse display exibirá o tempo em segundos que é pré-definido no código, além disso o app deve ser capaz de aceitar a entrada de 2 botões que tem como papel Start/Pause e Restart que reseta a contagem para o tempo pré-definido. Também é pedido que o código seja modelado pensando em funcionar como uma biblioteca para os problemas futuros, tendo como principais funçoes: 1- Escrever Carácter, 2- Limpar Display e 3- Posicionar cursor linha e coluna.
 
 
 
@@ -23,6 +23,17 @@ O problema propõe desenvolver um aplicativo de temporização que apresente a c
 
 ```http
   ./arquivo
+```
+#### Buildar Makefile
+
+```http
+  make all
+```
+
+#### Executar Makefile
+
+```http
+  make run
 ```
 
 ## :heavy_check_mark: Softwares Utilizados
@@ -98,6 +109,22 @@ BEQ cond -
 BLT cond -  
 
 BGT cond -  
+
+## Testes
+1- Contagem do valor pré-definido até 0
+Resultado: O Aplicativo funciona perfeitamente e ao chegar ao 0 reseta para o estado de espera do botão Start/Pause
+
+2- Usando Reset
+Resultado: O Aplicativo inicia a contagem e ao pressionar o botão Reset age como o esperado chegando no estado de espera do botão Start/Pause
+
+3- Usando Pause/Start
+Resultado: O Aplicativo inicia a contagem e ao pressionar o botão Pause/Start ele pausa a contagem e ao clicar novamente retorna a contagem, no entanto, em alguns momentos a depender da velocidade do clique a função pode não funcionar perfeitamente.
+
+4- Usando Reset enquanto pausado
+Resultado: O Aplicativo faz a contagem, pausa e ao tentar resetar não funciona exatamente como o programado.
+
+5- Usando Start/Pause e Reset ao mesmo tempo
+Resultado: Ao pressionar os 2 botões ao mesmo tempo ele reseta como esperado pelo programa, pois o reset tem prioridade.
 
 ## Autores
 
