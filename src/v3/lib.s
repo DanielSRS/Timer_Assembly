@@ -240,6 +240,68 @@
 
 .endm
 
+.macro send_cmd value
+
+
+    SetGpioValue pinRS, #off
+
+    MOV R2,#1
+    LSL R2,#7
+    AND R1,R2,\value
+    LSR R1,#7
+    SetGpioValue pinD7, R1
+
+    MOV R2,#1
+    LSL R2,#6
+    AND R1,R2,\value
+    LSR R1,#6
+    SetGpioValue pinD6, R1
+
+    MOV R2,#1
+    LSL R2,#5
+    AND R1,R2,\value
+    LSR R1,#5
+    SetGpioValue pinD5, R1
+
+
+    MOV R2,#1
+    LSL R2,#4
+    AND R1,R2,\value
+    LSR R1,#4
+    SetGpioValue pinD4, R1
+
+    SetEnable
+
+    SetGpioValue pinRS, #on
+
+    MOV R2,#1
+    LSL R2,#3
+    AND R1,R2,\value
+    LSR R1,#3
+    SetGpioValue pinD7, R1
+
+    MOV R2,#1
+    LSL R2,#2
+    AND R1,R2,\value
+    LSR R1,#2
+    SetGpioValue pinD6, R1
+
+    MOV R2,#1
+    LSL R2,#1
+    AND R1,R2,\value
+    LSR R1,#1
+    SetGpioValue pinD5, R1
+
+
+    MOV R2,#1
+    AND R1,R2,\value
+    SetGpioValue pinD4, R1
+
+    SetEnable
+    .ltorg
+
+.endm
+
 .macro InitDisplay
    SetPinsDisplayOut
    ClearDisplay
@@ -298,11 +360,65 @@ init_display:
     pop {R8}          @ Restaura o valor de R8
     bx lr             @ Retorna
 
+@ Posiciona cursor linha coluna 
+@ Recebe em R0 o valor do endereço base da gpio
+@ Recebe em r1 o numero da linha (1 ou 2)
+@ Recebe em r2 o numero da coluna (1 a 16)
+@ Salva em r8 o endereço base recebido em r0
+position_cursor:
+    push {R8}         @ Salva o valor atual de r8
+    cmp r1, #2        @ Se o valor da linha for maior que 2
+    bgt line_err      @ Retorna erro
+    cmp r2, #16       @ Se o valor da coluna for maior que 16
+    bgt column_err    @ Retorna erro
+
+    cmp r1, #1        @ Se o valor da linha for menor que 1
+    blt line_err      @ Retorna erro
+    cmp r2, #1        @ Se o valor da coluna for menor que 1
+    blt column_err    @ Retorna erro
+
+    b change_position
+
+line_err:
+    mov r0, #1        @ Retorna erro
+    b p_c_return
+
+column_err:
+    mov r0, #2        @ Retorna erro
+    b p_c_return
+    @
+    pop {R8}          @ Restaura o valor de R8
+
+change_position:
+    cmp r1, #1        @ se o selecionado primeira linha
+    beq first_line    @ Vá para a primeria linha
+    b second_line     @ Do contrario, vá para a segunda
+
+first_line:
+    send_cmd #0x80    @ Coloca o cursor no inicio da primeira linha
+    b set_column
+second_line:
+    send_cmd #0xC0    @ Coloca o cursor no inicio da segunda linha
+    b set_column
+
+set_column:
+    sub r2, r2, #1
+    cmp r2, #0        @ Se igual a zero, já esta na coluna desejada
+    beq p_c_success   @ e retorna sucesso
+                      @ Do contrario
+    send_cmd #0x06    @ incrementa a posição do cursor em 1 para a direita
+    b set_column      @ repete até encontrar a coluna certa
+
+p_c_success:
+    mov r0, #0        @ Retorna sucesso
+p_c_return
+    bx lr
+
 
 .data
 
-timespecsec: .word 0
-timespecnano: .word 015000000
+timespecsec: .word 0              @ zero segundos
+timespecnano: .word 015000000     @ 15
 
 
 @ Pinos da GPIO conectados no display
