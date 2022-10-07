@@ -11,18 +11,18 @@ O problema propõe desenvolver um aplicativo de temporização para um processad
 #### Assemblar um arquivo
 
 ```http
-  as -o arquivo.o arquivo.s
+  as -o lcd_main.o lcd_main.s
 ```
 
 #### Linkar um objeto compilado ou arquivo compactado
 
 ```http
-  ld -o arquivo arquivo.o
+  ld -o lcd_main lcd_main.o
 ```
 #### Executar código
 
 ```http
-  ./arquivo
+  ./lcd_main
 ```
 #### Buildar Makefile
 
