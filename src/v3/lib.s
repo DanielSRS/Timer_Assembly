@@ -409,7 +409,7 @@ set_column:
 
 p_c_success:
     mov r0, #0        @ Retorna sucesso
-p_c_return
+p_c_return:
     pop {R8}          @ Restaura o valor de R8
     bx lr
 
