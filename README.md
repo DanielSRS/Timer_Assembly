@@ -27,7 +27,7 @@ O problema propõe desenvolver um aplicativo de temporização para um processad
 #### Buildar Makefile
 
 ```http
-  make run
+  make all
 ```
 
 #### Executar Makefile
