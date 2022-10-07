@@ -311,8 +311,11 @@
 _start:
     InitDisplay
     InitDisplay
-    MOV R12, #9
-    MOV R4, #9
+
+restart:
+    ClearDisplay
+    MOV R12, #3
+    MOV R4, #0
 
     writeChar #65  @A
     writeChar #112 @p
@@ -346,11 +349,6 @@ wait_button_start:
     bne wait_button_start
     nanoSleep2 time100ms
     b wait_button_up_start
-
-restart:
-
-        MOV R12, #9
-        MOV R4,  #9
 
 wait_button_up_start:
     LDR R9, [R8, #level]
