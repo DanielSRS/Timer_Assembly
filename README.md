@@ -120,7 +120,7 @@ Resultado: O Aplicativo inicia a contagem e ao pressionar o botão Reset age com
 Resultado: O Aplicativo inicia a contagem e ao pressionar o botão Pause/Start ele pausa a contagem e ao clicar novamente retorna a contagem, no entanto, em alguns momentos a depender da velocidade do clique a função pode não funcionar perfeitamente.
 
 4- Usando Reset enquanto pausado
-Resultado: O Aplicativo faz a contagem, pausa e ao tentar resetar não funciona exatamente como o programado.
+Resultado: O Aplicativo faz a contagem, pausa e ao tentar resetar funciona exatamente como o programado, permanecendo no estado de pause.
 
 5- Usando Start/Pause e Reset ao mesmo tempo
 Resultado: Ao pressionar os 2 botões ao mesmo tempo ele reseta como esperado pelo programa, pois o reset tem prioridade.
